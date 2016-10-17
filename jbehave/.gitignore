@@ -1,0 +1,10 @@
+/.classpath
+.DS_Store
+.idea
+*.iml
+META-INF
+out
+/.project
+/.settings
+*.swp
+/target
