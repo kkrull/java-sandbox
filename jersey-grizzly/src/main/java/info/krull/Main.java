@@ -25,6 +25,7 @@ public class Main {
       "org.glassfish.jersey.examples.multipart");
     config.register(MultiPartFeature.class);
 
-    return GrizzlyHttpServerFactory.createHttpServer(URI.create(BASE_URI), config);
+    HttpServer httpServer = GrizzlyHttpServerFactory.createHttpServer(URI.create(BASE_URI), config);
+    return httpServer;
   }
 }
