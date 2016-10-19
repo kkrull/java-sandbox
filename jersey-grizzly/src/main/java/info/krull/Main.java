@@ -2,7 +2,6 @@ package info.krull;
 
 import org.glassfish.grizzly.http.server.HttpServer;
 import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
-import org.glassfish.jersey.media.multipart.MultiPartFeature;
 import org.glassfish.jersey.server.ResourceConfig;
 
 import java.io.IOException;
@@ -23,7 +22,6 @@ public class Main {
     final ResourceConfig config = new ResourceConfig().packages(
       "info.krull",
       "org.glassfish.jersey.examples.multipart");
-    config.register(MultiPartFeature.class);
 
     HttpServer httpServer = GrizzlyHttpServerFactory.createHttpServer(URI.create(BASE_URI), config);
     return httpServer;
