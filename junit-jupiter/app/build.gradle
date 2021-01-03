@@ -1,0 +1,57 @@
+plugins {
+    // Apply the application plugin to add support for building a CLI application in Java.
+    id 'application'
+
+    // Test logging
+    id 'com.adarshr.test-logger' version '2.1.1'
+}
+
+repositories {
+    jcenter()
+}
+
+dependencies {
+    // JUnit Jupiter and JUnit Jupiter Engine for testing
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
+
+    testImplementation 'org.mockito:mockito-core:3.6.28'
+    testImplementation 'org.mockito:mockito-junit-jupiter:3.6.28'
+
+
+    // This dependency is used by the application.
+    implementation 'com.google.guava:guava:29.0-jre'
+}
+
+application {
+    mainClass = 'com.github.kkrull.App'
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
+
+//TODO KDK: Get mocha formatting to work better on Windows: https://github.com/radarsh/gradle-test-logger-plugin#does-it-work-on-windows
+//https://github.com/radarsh/gradle-test-logger-plugin
+testlogger {
+    theme 'mocha'
+
+    // showExceptions true
+    // showStackTraces true
+    // showFullStackTraces false
+    // showCauses true
+
+    // slowThreshold 2000
+
+    // showSummary true
+    // showSimpleNames false
+
+    // showPassed true
+    // showSkipped true
+    // showFailed true
+
+    // showStandardStreams false
+    // showPassedStandardStreams true
+    // showSkippedStandardStreams true
+    // showFailedStandardStreams true    
+}
