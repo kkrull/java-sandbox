@@ -1,7 +1,9 @@
 package gradle.hello;
 
 import org.junit.jupiter.engine.JupiterTestEngine;
-import org.junit.platform.engine.TestExecutionResult;
+import org.junit.platform.engine.*;
+import org.junit.platform.engine.support.hierarchical.EngineExecutionContext;
+import org.junit.platform.engine.support.hierarchical.HierarchicalTestEngine;
 import org.junit.platform.launcher.*;
 import org.junit.platform.launcher.core.LauncherConfig;
 import org.junit.platform.launcher.core.LauncherDiscoveryRequestBuilder;
@@ -13,19 +15,37 @@ import static org.junit.platform.engine.discovery.DiscoverySelectors.selectPacka
 
 public class LaunchMain {
   public static void main(String[] args) {
-    //TODO KDK: Register a custom TestEngine: https://junit.org/junit5/docs/5.8.1/user-guide/index.html#launcher-api-execution
     System.out.println("Launcher says hello!");
 
     LauncherConfig launcherConfig = LauncherConfig.builder()
       .enableTestEngineAutoRegistration(false)
       .enableTestExecutionListenerAutoRegistration(false)
-      .addTestEngines(new JupiterTestEngine())
+      .addTestEngines(new HierarchicalTestEngine<JavaSpecExecutionContext>() {
+        @Override
+        protected JavaSpecExecutionContext createExecutionContext(ExecutionRequest request) {
+          throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public TestDescriptor discover(EngineDiscoveryRequest discoveryRequest, UniqueId uniqueId) {
+          //TODO KDK: Implement a custom TestEngine https://junit.org/junit5/docs/5.8.1/user-guide/index.html#launcher-api-execution
+          throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public String getId() {
+          //TODO KDK: It can't start with the prefix junit-
+          throw new UnsupportedOperationException();
+        }
+      })
       .addTestExecutionListeners(executionListener())
       .build();
 
     Launcher launcher = LauncherFactory.create(launcherConfig);
     launcher.execute(discoverRequestForTestClass());
   }
+
+  interface JavaSpecExecutionContext extends EngineExecutionContext { }
 
   private static TestExecutionListener executionListener() {
     return new TestExecutionListener() {
