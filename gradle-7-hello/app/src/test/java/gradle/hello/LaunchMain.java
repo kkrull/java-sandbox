@@ -20,45 +20,48 @@ public class LaunchMain {
       .enableTestEngineAutoRegistration(false)
       .enableTestExecutionListenerAutoRegistration(false)
       .addTestEngines(new JupiterTestEngine())
-      .addTestExecutionListeners(new TestExecutionListener() {
-        @Override
-        public void testPlanExecutionStarted(TestPlan testPlan) {
-          System.out.println("[testPlanExecutionStarted]");
-          TestExecutionListener.super.testPlanExecutionStarted(testPlan);
-        }
-
-        @Override
-        public void executionStarted(TestIdentifier testIdentifier) {
-          System.out.println("[executionStarted] " + testIdentifier.getDisplayName());
-          TestExecutionListener.super.executionStarted(testIdentifier);
-        }
-
-        @Override
-        public void executionFinished(TestIdentifier testIdentifier, TestExecutionResult testExecutionResult) {
-          System.out.println("[executionFinished] " + testIdentifier.getDisplayName());
-          TestExecutionListener.super.executionFinished(testIdentifier, testExecutionResult);
-        }
-
-        @Override
-        public void testPlanExecutionFinished(TestPlan testPlan) {
-          System.out.println("[testPlanExecutionFinished]");
-          TestExecutionListener.super.testPlanExecutionFinished(testPlan);
-        }
-      })
+      .addTestExecutionListeners(executionListener())
       .build();
 
     Launcher launcher = LauncherFactory.create(launcherConfig);
+    launcher.execute(discoverRequestForTestClass());
+  }
 
-    LauncherDiscoveryRequest discoveryRequest = LauncherDiscoveryRequestBuilder.request()
+  private static TestExecutionListener executionListener() {
+    return new TestExecutionListener() {
+      @Override
+      public void testPlanExecutionStarted(TestPlan testPlan) {
+        System.out.println("[testPlanExecutionStarted]");
+        TestExecutionListener.super.testPlanExecutionStarted(testPlan);
+      }
+
+      @Override
+      public void executionStarted(TestIdentifier testIdentifier) {
+        System.out.println("[executionStarted] " + testIdentifier.getDisplayName());
+        TestExecutionListener.super.executionStarted(testIdentifier);
+      }
+
+      @Override
+      public void executionFinished(TestIdentifier testIdentifier, TestExecutionResult testExecutionResult) {
+        System.out.println("[executionFinished] " + testIdentifier.getDisplayName());
+        TestExecutionListener.super.executionFinished(testIdentifier, testExecutionResult);
+      }
+
+      @Override
+      public void testPlanExecutionFinished(TestPlan testPlan) {
+        System.out.println("[testPlanExecutionFinished]");
+        TestExecutionListener.super.testPlanExecutionFinished(testPlan);
+      }
+    };
+  }
+
+  private static LauncherDiscoveryRequest discoverRequestForTestClass() {
+    return LauncherDiscoveryRequestBuilder.request()
       .selectors(
         selectPackage("gradle.hello"),
         selectClass(AppTest.class)
       )
-      .filters(
-        includeClassNamePatterns(".*Test")
-      )
+      .filters(includeClassNamePatterns(".*Test"))
       .build();
-
-    launcher.execute(discoveryRequest);
   }
 }
