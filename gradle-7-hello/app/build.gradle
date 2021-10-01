@@ -28,6 +28,7 @@ tasks.named('test') {
     useJUnitPlatform() //Use JUnit Platform for unit tests
 }
 
+//TODO KDK: Figure out what is depreceated about using main
 task runTestLauncher(type: JavaExec) {
     group = "Execution"
     description = "Run the test main class with JavaExecTask"
