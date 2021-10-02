@@ -1,5 +1,6 @@
 package gradle.hello;
 
+import org.junit.jupiter.engine.JupiterTestEngine;
 import org.junit.platform.engine.*;
 import org.junit.platform.engine.support.hierarchical.EngineExecutionContext;
 import org.junit.platform.engine.support.hierarchical.HierarchicalTestEngine;
@@ -19,23 +20,8 @@ public class LaunchMain {
     LauncherConfig launcherConfig = LauncherConfig.builder()
       .enableTestEngineAutoRegistration(false)
       .enableTestExecutionListenerAutoRegistration(false)
-      .addTestEngines(new HierarchicalTestEngine<JavaSpecExecutionContext>() {
-        @Override
-        protected JavaSpecExecutionContext createExecutionContext(ExecutionRequest request) {
-          throw new UnsupportedOperationException();
-        }
-
-        @Override
-        public TestDescriptor discover(EngineDiscoveryRequest discoveryRequest, UniqueId uniqueId) {
-          //TODO KDK: Implement a custom TestEngine https://junit.org/junit5/docs/5.8.1/user-guide/index.html#launcher-api-execution
-          throw new UnsupportedOperationException();
-        }
-
-        @Override
-        public String getId() {
-          return "javaspec-engine";
-        }
-      })
+      .addTestEngines(new JupiterTestEngine())
+//      .addTestEngines(javaSpecTestEngine())
       .addLauncherDiscoveryListeners(launcherDiscoveryListener())
       .addTestExecutionListeners(executionListener())
       .build();
@@ -44,15 +30,9 @@ public class LaunchMain {
     launcher.execute(discoverRequestForTestClass());
   }
 
-  interface JavaSpecExecutionContext extends EngineExecutionContext { }
-
   private static LauncherDiscoveryRequest discoverRequestForTestClass() {
     return LauncherDiscoveryRequestBuilder.request()
-      .selectors(
-        selectPackage("gradle.hello"),
-        selectClass(AppTest.class)
-      )
-      .filters(includeClassNamePatterns(".*Test"))
+      .selectors(selectClass(AppTest.class))
       .build();
   }
 
@@ -79,6 +59,29 @@ public class LaunchMain {
       }
     };
   }
+
+  private static HierarchicalTestEngine<EngineExecutionContext> javaSpecTestEngine() {
+    return new HierarchicalTestEngine<>() {
+      @Override
+      protected JavaSpecExecutionContext createExecutionContext(ExecutionRequest request) {
+        throw new UnsupportedOperationException();
+      }
+
+      @Override
+      public TestDescriptor discover(EngineDiscoveryRequest discoveryRequest, UniqueId uniqueId) {
+        System.out.println("[discover] %s".formatted(uniqueId));
+        //TODO KDK: Implement a custom TestEngine https://junit.org/junit5/docs/5.8.1/user-guide/index.html#launcher-api-execution
+        throw new UnsupportedOperationException();
+      }
+
+      @Override
+      public String getId() {
+        return "javaspec-engine";
+      }
+    };
+  }
+
+  interface JavaSpecExecutionContext extends EngineExecutionContext { }
 
   private static LauncherDiscoveryListener launcherDiscoveryListener() {
     return new LauncherDiscoveryListener() {
