@@ -1,9 +1,7 @@
 package gradle.hello;
 
-import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.engine.JupiterTestEngine;
 import org.junit.jupiter.engine.config.DefaultJupiterConfiguration;
-import org.junit.jupiter.engine.config.JupiterConfiguration;
 import org.junit.jupiter.engine.descriptor.ClassTestDescriptor;
 import org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor;
 import org.junit.platform.engine.*;
@@ -16,11 +14,8 @@ import org.junit.platform.launcher.core.LauncherDiscoveryRequestBuilder;
 import org.junit.platform.launcher.core.LauncherFactory;
 
 import java.util.Optional;
-import java.util.Set;
 
-import static org.junit.platform.engine.discovery.ClassNameFilter.includeClassNamePatterns;
 import static org.junit.platform.engine.discovery.DiscoverySelectors.selectClass;
-import static org.junit.platform.engine.discovery.DiscoverySelectors.selectPackage;
 
 public class LaunchMain {
   public static void main(String[] args) {
@@ -71,30 +66,44 @@ public class LaunchMain {
 
   private static HierarchicalTestEngine<EngineExecutionContext> javaSpecTestEngine() {
     /*
+LaunchMain says hello!
+[launcherDiscoveryStarted]
+[engineDiscoveryStarted] [engine:junit-jupiter]
+[engineDiscoveryFinished] [engine:junit-jupiter]: SUCCESSFUL
+[launcherDiscoveryFinished]
+[testPlanExecutionStarted]
 [executionStarted] [engine:junit-jupiter] (JUnit Jupiter)
 [executionStarted] [engine:junit-jupiter]/[class:gradle.hello.AppTest] (AppTest)
 [executionStarted] [engine:junit-jupiter]/[class:gradle.hello.AppTest]/[method:appHasAGreeting()] (appHasAGreeting())
 [executionFinished] [engine:junit-jupiter]/[class:gradle.hello.AppTest]/[method:appHasAGreeting()] (appHasAGreeting())
 [executionFinished] [engine:junit-jupiter]/[class:gradle.hello.AppTest] (AppTest)
 [executionFinished] [engine:junit-jupiter] (JUnit Jupiter)
-     */
+[testPlanExecutionFinished]
+    */
     return new HierarchicalTestEngine<>() {
       @Override
       protected JavaSpecExecutionContext createExecutionContext(ExecutionRequest request) {
-        throw new UnsupportedOperationException();
+        return new JavaSpecExecutionContext();
       }
 
       @Override
-      public TestDescriptor discover(EngineDiscoveryRequest discoveryRequest, UniqueId id) {
+      public TestDescriptor discover(EngineDiscoveryRequest discoveryRequest, UniqueId engineId) {
         //TODO KDK: Implement a custom TestEngine https://junit.org/junit5/docs/5.8.1/user-guide/index.html#launcher-api-execution
-        System.out.println("[discover] %s".formatted(id));
+        System.out.println("[discover] %s".formatted(engineId));
 
-        //TODO KDK: Add a child MethodDescriptor to this, before returning it
-        return new ClassTestDescriptor(
-          id.append("class", "gradle.hello.AppTest"),
+        UniqueId classId = engineId.append("class", "gradle.hello.AppTest");
+        System.out.println("[discover] %s".formatted(classId));
+        ClassTestDescriptor classDescriptor = new ClassTestDescriptor(
+          classId,
           AppTest.class,
-          new DefaultJupiterConfiguration(emptyConfigurationParameters())
+          emptyConfiguration()
         );
+        //TODO KDK: Why isn't the test method descriptor being executed?
+        classDescriptor.addChild(testMethodDescriptor(classId));
+
+        EngineDescriptor engineDescriptor = new EngineDescriptor(engineId, "JavaSpec");
+        engineDescriptor.addChild(classDescriptor);
+        return engineDescriptor;
       }
 
       @Override
@@ -104,9 +113,8 @@ public class LaunchMain {
     };
   }
 
-  //TODO KDK: What configuration parameters should be made here?  https://junit.org/junit5/docs/5.8.1/user-guide/index.html#running-tests-config-params
-  private static ConfigurationParameters emptyConfigurationParameters() {
-    return new ConfigurationParameters() {
+  private static DefaultJupiterConfiguration emptyConfiguration() {
+    return new DefaultJupiterConfiguration(new ConfigurationParameters() {
       @Override
       public Optional<String> get(String key) {
         return Optional.empty();
@@ -121,10 +129,10 @@ public class LaunchMain {
       public int size() {
         return 0;
       }
-    };
+    });
   }
 
-  interface JavaSpecExecutionContext extends EngineExecutionContext { }
+  static class JavaSpecExecutionContext implements EngineExecutionContext { }
 
   private static LauncherDiscoveryListener launcherDiscoveryListener() {
     return new LauncherDiscoveryListener() {
@@ -148,5 +156,21 @@ public class LaunchMain {
         System.out.println("[launcherDiscoveryFinished]");
       }
     };
+  }
+
+  private static TestMethodTestDescriptor testMethodDescriptor(UniqueId classId) {
+    UniqueId methodId = classId.append("method", "appHasAGreeting()");
+    System.out.println("[discover] %s".formatted(methodId));
+
+    try {
+      return new TestMethodTestDescriptor(
+        methodId,
+        AppTest.class,
+        AppTest.class.getDeclaredMethod("appHasAGreeting"),
+        emptyConfiguration()
+      );
+    } catch (NoSuchMethodException e) {
+      throw new RuntimeException("Failed to look up test method", e);
+    }
   }
 }
