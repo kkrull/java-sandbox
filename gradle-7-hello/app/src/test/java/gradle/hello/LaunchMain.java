@@ -1,6 +1,5 @@
 package gradle.hello;
 
-import org.junit.jupiter.engine.JupiterTestEngine;
 import org.junit.platform.engine.*;
 import org.junit.platform.engine.support.hierarchical.EngineExecutionContext;
 import org.junit.platform.engine.support.hierarchical.HierarchicalTestEngine;
@@ -15,7 +14,7 @@ import static org.junit.platform.engine.discovery.DiscoverySelectors.selectPacka
 
 public class LaunchMain {
   public static void main(String[] args) {
-    System.out.println("Launcher says hello!");
+    System.out.println("LaunchMain says hello!");
 
     LauncherConfig launcherConfig = LauncherConfig.builder()
       .enableTestEngineAutoRegistration(false)
@@ -34,10 +33,10 @@ public class LaunchMain {
 
         @Override
         public String getId() {
-          //TODO KDK: It can't start with the prefix junit-
-          throw new UnsupportedOperationException();
+          return "javaspec-engine";
         }
       })
+      .addLauncherDiscoveryListeners(launcherDiscoveryListener())
       .addTestExecutionListeners(executionListener())
       .build();
 
@@ -47,34 +46,6 @@ public class LaunchMain {
 
   interface JavaSpecExecutionContext extends EngineExecutionContext { }
 
-  private static TestExecutionListener executionListener() {
-    return new TestExecutionListener() {
-      @Override
-      public void testPlanExecutionStarted(TestPlan testPlan) {
-        System.out.println("[testPlanExecutionStarted]");
-        TestExecutionListener.super.testPlanExecutionStarted(testPlan);
-      }
-
-      @Override
-      public void executionStarted(TestIdentifier testIdentifier) {
-        System.out.println("[executionStarted] " + testIdentifier.getDisplayName());
-        TestExecutionListener.super.executionStarted(testIdentifier);
-      }
-
-      @Override
-      public void executionFinished(TestIdentifier testIdentifier, TestExecutionResult testExecutionResult) {
-        System.out.println("[executionFinished] " + testIdentifier.getDisplayName());
-        TestExecutionListener.super.executionFinished(testIdentifier, testExecutionResult);
-      }
-
-      @Override
-      public void testPlanExecutionFinished(TestPlan testPlan) {
-        System.out.println("[testPlanExecutionFinished]");
-        TestExecutionListener.super.testPlanExecutionFinished(testPlan);
-      }
-    };
-  }
-
   private static LauncherDiscoveryRequest discoverRequestForTestClass() {
     return LauncherDiscoveryRequestBuilder.request()
       .selectors(
@@ -83,5 +54,53 @@ public class LaunchMain {
       )
       .filters(includeClassNamePatterns(".*Test"))
       .build();
+  }
+
+  private static TestExecutionListener executionListener() {
+    return new TestExecutionListener() {
+      @Override
+      public void testPlanExecutionStarted(TestPlan testPlan) {
+        System.out.println("[testPlanExecutionStarted]");
+      }
+
+      @Override
+      public void executionStarted(TestIdentifier testIdentifier) {
+        System.out.println("[executionStarted] %s".formatted(testIdentifier.getDisplayName()));
+      }
+
+      @Override
+      public void executionFinished(TestIdentifier testIdentifier, TestExecutionResult testExecutionResult) {
+        System.out.println("[executionFinished] %s".formatted(testIdentifier.getDisplayName()));
+      }
+
+      @Override
+      public void testPlanExecutionFinished(TestPlan testPlan) {
+        System.out.println("[testPlanExecutionFinished]");
+      }
+    };
+  }
+
+  private static LauncherDiscoveryListener launcherDiscoveryListener() {
+    return new LauncherDiscoveryListener() {
+      @Override
+      public void launcherDiscoveryStarted(LauncherDiscoveryRequest request) {
+        System.out.println("[launcherDiscoveryStarted]");
+      }
+
+      @Override
+      public void engineDiscoveryStarted(UniqueId engineId) {
+        System.out.println("[engineDiscoveryStarted] %s".formatted(engineId));
+      }
+
+      @Override
+      public void engineDiscoveryFinished(UniqueId engineId, EngineDiscoveryResult result) {
+        System.out.println("[engineDiscoveryFinished] %s: %s".formatted(engineId, result.getStatus()));
+      }
+
+      @Override
+      public void launcherDiscoveryFinished(LauncherDiscoveryRequest request) {
+        System.out.println("[launcherDiscoveryFinished]");
+      }
+    };
   }
 }
