@@ -2,6 +2,9 @@ package gradle.hello;
 
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.engine.JupiterTestEngine;
+import org.junit.jupiter.engine.config.DefaultJupiterConfiguration;
+import org.junit.jupiter.engine.config.JupiterConfiguration;
+import org.junit.jupiter.engine.descriptor.ClassTestDescriptor;
 import org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor;
 import org.junit.platform.engine.*;
 import org.junit.platform.engine.support.descriptor.EngineDescriptor;
@@ -85,12 +88,38 @@ public class LaunchMain {
       public TestDescriptor discover(EngineDiscoveryRequest discoveryRequest, UniqueId id) {
         //TODO KDK: Implement a custom TestEngine https://junit.org/junit5/docs/5.8.1/user-guide/index.html#launcher-api-execution
         System.out.println("[discover] %s".formatted(id));
-        return new EngineDescriptor(id.appendEngine(this.getId()), "JavaSpec");
+
+        //TODO KDK: Add a child MethodDescriptor to this, before returning it
+        return new ClassTestDescriptor(
+          id.append("class", "gradle.hello.AppTest"),
+          AppTest.class,
+          new DefaultJupiterConfiguration(emptyConfigurationParameters())
+        );
       }
 
       @Override
       public String getId() {
         return "javaspec-engine";
+      }
+    };
+  }
+
+  //TODO KDK: What configuration parameters should be made here?  https://junit.org/junit5/docs/5.8.1/user-guide/index.html#running-tests-config-params
+  private static ConfigurationParameters emptyConfigurationParameters() {
+    return new ConfigurationParameters() {
+      @Override
+      public Optional<String> get(String key) {
+        return Optional.empty();
+      }
+
+      @Override
+      public Optional<Boolean> getBoolean(String key) {
+        return Optional.empty();
+      }
+
+      @Override
+      public int size() {
+        return 0;
       }
     };
   }
