@@ -8,6 +8,7 @@ import org.junit.platform.engine.*;
 import org.junit.platform.engine.support.descriptor.EngineDescriptor;
 import org.junit.platform.engine.support.hierarchical.EngineExecutionContext;
 import org.junit.platform.engine.support.hierarchical.HierarchicalTestEngine;
+import org.junit.platform.engine.support.hierarchical.HierarchicalTestExecutorService;
 import org.junit.platform.launcher.*;
 import org.junit.platform.launcher.core.LauncherConfig;
 import org.junit.platform.launcher.core.LauncherDiscoveryRequestBuilder;
@@ -83,23 +84,24 @@ LaunchMain says hello!
     return new HierarchicalTestEngine<>() {
       @Override
       protected JavaSpecExecutionContext createExecutionContext(ExecutionRequest request) {
+        System.out.println("[createExecutionContext] %s".formatted(request.getConfigurationParameters()));
         return new JavaSpecExecutionContext();
       }
 
       @Override
       public TestDescriptor discover(EngineDiscoveryRequest discoveryRequest, UniqueId engineId) {
         //TODO KDK: Implement a custom TestEngine https://junit.org/junit5/docs/5.8.1/user-guide/index.html#launcher-api-execution
-        System.out.println("[discover] %s".formatted(engineId));
+        //TODO KDK: Maybe try making Nodes and TestDescriptors manually, instead of using the built-in types
+        System.out.println("[discover engine] %s".formatted(engineId));
 
         UniqueId classId = engineId.append("class", "gradle.hello.AppTest");
-        System.out.println("[discover] %s".formatted(classId));
+        System.out.println("[discover class] %s".formatted(classId));
         ClassTestDescriptor classDescriptor = new ClassTestDescriptor(
           classId,
           AppTest.class,
           emptyConfiguration()
         );
-        //TODO KDK: Why isn't the test method descriptor being executed?
-        classDescriptor.addChild(testMethodDescriptor(classId));
+        classDescriptor.addChild(testMethodDescriptor(classId)); //TODO KDK: Why isn't the test method descriptor being executed?
 
         EngineDescriptor engineDescriptor = new EngineDescriptor(engineId, "JavaSpec");
         engineDescriptor.addChild(classDescriptor);
@@ -160,7 +162,7 @@ LaunchMain says hello!
 
   private static TestMethodTestDescriptor testMethodDescriptor(UniqueId classId) {
     UniqueId methodId = classId.append("method", "appHasAGreeting()");
-    System.out.println("[discover] %s".formatted(methodId));
+    System.out.println("[discover method] %s".formatted(methodId));
 
     try {
       return new TestMethodTestDescriptor(

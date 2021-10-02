@@ -4,7 +4,12 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 class AppTest {
+  public AppTest() {
+    System.out.println("[AppTest::AppTest]");
+  }
+
   @Test void appHasAGreeting() {
+    System.out.println("[AppTest#appHasAGreeting]");
     App subject = new App();
     assertNotNull(subject.getGreeting(), "app should have a greeting");
   }
