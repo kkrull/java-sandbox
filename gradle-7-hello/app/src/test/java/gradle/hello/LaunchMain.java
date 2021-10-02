@@ -1,13 +1,19 @@
 package gradle.hello;
 
+import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.engine.JupiterTestEngine;
+import org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor;
 import org.junit.platform.engine.*;
+import org.junit.platform.engine.support.descriptor.EngineDescriptor;
 import org.junit.platform.engine.support.hierarchical.EngineExecutionContext;
 import org.junit.platform.engine.support.hierarchical.HierarchicalTestEngine;
 import org.junit.platform.launcher.*;
 import org.junit.platform.launcher.core.LauncherConfig;
 import org.junit.platform.launcher.core.LauncherDiscoveryRequestBuilder;
 import org.junit.platform.launcher.core.LauncherFactory;
+
+import java.util.Optional;
+import java.util.Set;
 
 import static org.junit.platform.engine.discovery.ClassNameFilter.includeClassNamePatterns;
 import static org.junit.platform.engine.discovery.DiscoverySelectors.selectClass;
@@ -20,8 +26,8 @@ public class LaunchMain {
     LauncherConfig launcherConfig = LauncherConfig.builder()
       .enableTestEngineAutoRegistration(false)
       .enableTestExecutionListenerAutoRegistration(false)
-      .addTestEngines(new JupiterTestEngine())
-//      .addTestEngines(javaSpecTestEngine())
+//      .addTestEngines(new JupiterTestEngine())
+      .addTestEngines(javaSpecTestEngine())
       .addLauncherDiscoveryListeners(launcherDiscoveryListener())
       .addTestExecutionListeners(executionListener())
       .build();
@@ -44,13 +50,13 @@ public class LaunchMain {
       }
 
       @Override
-      public void executionStarted(TestIdentifier testIdentifier) {
-        System.out.println("[executionStarted] %s".formatted(testIdentifier.getDisplayName()));
+      public void executionStarted(TestIdentifier testId) {
+        System.out.println("[executionStarted] %s (%s)".formatted(testId.getUniqueId(), testId.getDisplayName()));
       }
 
       @Override
-      public void executionFinished(TestIdentifier testIdentifier, TestExecutionResult testExecutionResult) {
-        System.out.println("[executionFinished] %s".formatted(testIdentifier.getDisplayName()));
+      public void executionFinished(TestIdentifier testId, TestExecutionResult testExecutionResult) {
+        System.out.println("[executionFinished] %s (%s)".formatted(testId.getUniqueId(), testId.getDisplayName()));
       }
 
       @Override
@@ -61,6 +67,14 @@ public class LaunchMain {
   }
 
   private static HierarchicalTestEngine<EngineExecutionContext> javaSpecTestEngine() {
+    /*
+[executionStarted] [engine:junit-jupiter] (JUnit Jupiter)
+[executionStarted] [engine:junit-jupiter]/[class:gradle.hello.AppTest] (AppTest)
+[executionStarted] [engine:junit-jupiter]/[class:gradle.hello.AppTest]/[method:appHasAGreeting()] (appHasAGreeting())
+[executionFinished] [engine:junit-jupiter]/[class:gradle.hello.AppTest]/[method:appHasAGreeting()] (appHasAGreeting())
+[executionFinished] [engine:junit-jupiter]/[class:gradle.hello.AppTest] (AppTest)
+[executionFinished] [engine:junit-jupiter] (JUnit Jupiter)
+     */
     return new HierarchicalTestEngine<>() {
       @Override
       protected JavaSpecExecutionContext createExecutionContext(ExecutionRequest request) {
@@ -68,10 +82,10 @@ public class LaunchMain {
       }
 
       @Override
-      public TestDescriptor discover(EngineDiscoveryRequest discoveryRequest, UniqueId uniqueId) {
-        System.out.println("[discover] %s".formatted(uniqueId));
+      public TestDescriptor discover(EngineDiscoveryRequest discoveryRequest, UniqueId id) {
         //TODO KDK: Implement a custom TestEngine https://junit.org/junit5/docs/5.8.1/user-guide/index.html#launcher-api-execution
-        throw new UnsupportedOperationException();
+        System.out.println("[discover] %s".formatted(id));
+        return new EngineDescriptor(id.appendEngine(this.getId()), "JavaSpec");
       }
 
       @Override
