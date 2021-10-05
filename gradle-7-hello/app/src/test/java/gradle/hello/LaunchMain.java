@@ -13,6 +13,7 @@ import org.junit.platform.launcher.*;
 import org.junit.platform.launcher.core.LauncherConfig;
 import org.junit.platform.launcher.core.LauncherDiscoveryRequestBuilder;
 import org.junit.platform.launcher.core.LauncherFactory;
+import org.junit.vintage.engine.VintageTestEngine;
 
 import java.util.Optional;
 
@@ -27,6 +28,7 @@ public class LaunchMain {
       .enableTestExecutionListenerAutoRegistration(false)
 //      .addTestEngines(new JupiterTestEngine())
       .addTestEngines(javaSpecTestEngine())
+//      .addTestEngines(new VintageTestEngine())
       .addLauncherDiscoveryListeners(launcherDiscoveryListener())
       .addTestExecutionListeners(executionListener())
       .build();
