@@ -5,11 +5,10 @@ import org.junit.jupiter.engine.descriptor.ClassTestDescriptor;
 import org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor;
 import org.junit.platform.engine.*;
 import org.junit.platform.engine.support.descriptor.EngineDescriptor;
-import org.junit.platform.engine.support.hierarchical.HierarchicalTestEngine;
 
 import java.util.Optional;
 
-public class JavaSpecTestEngine extends HierarchicalTestEngine<JavaSpecExecutionContext> {
+public class JavaSpecTestEngine implements TestEngine {
   /*
 LaunchMain says hello!
 [launcherDiscoveryStarted]
@@ -26,15 +25,7 @@ LaunchMain says hello!
 [testPlanExecutionFinished]
   */
 
-  @Override
-  protected JavaSpecExecutionContext createExecutionContext(ExecutionRequest request) {
-    System.out.println("[createExecutionContext] %s".formatted(request.getConfigurationParameters()));
-    return new JavaSpecExecutionContext();
-  }
-
-  //TODO KDK: Look at VintageDiscoverer#discover from VintageTestEngine, for an example
-  @Override
-  public TestDescriptor discover(EngineDiscoveryRequest discoveryRequest, UniqueId engineId) {
+  public TestDescriptor discoverOld(EngineDiscoveryRequest discoveryRequest, UniqueId engineId) {
     System.out.println("[discover engine] %s".formatted(engineId));
 
     UniqueId classId = engineId.append("class", "gradle.hello.AppTest");
@@ -49,6 +40,17 @@ LaunchMain says hello!
     EngineDescriptor engineDescriptor = new EngineDescriptor(engineId, "JavaSpec");
     engineDescriptor.addChild(classDescriptor);
     return engineDescriptor;
+  }
+
+  @Override
+  public TestDescriptor discover(EngineDiscoveryRequest discoveryRequest, UniqueId engineId) {
+    EngineDescriptor engineDescriptor = new EngineDescriptor(engineId, "JavaSpec");
+    return engineDescriptor;
+  }
+
+  @Override
+  public void execute(ExecutionRequest request) {
+
   }
 
   @Override

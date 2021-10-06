@@ -19,41 +19,18 @@ public class LaunchMain {
       .addTestEngines(new JavaSpecTestEngine())
 //      .addTestEngines(new VintageTestEngine())
       .addLauncherDiscoveryListeners(launcherDiscoveryListener())
-      .addTestExecutionListeners(executionListener())
+      .addTestExecutionListeners(testExecutionListener())
       .build();
 
     Launcher launcher = LauncherFactory.create(launcherConfig);
     launcher.execute(discoverRequestForTestClass());
+    AppTest.assertRanOnce();
   }
 
   private static LauncherDiscoveryRequest discoverRequestForTestClass() {
     return LauncherDiscoveryRequestBuilder.request()
       .selectors(selectClass(AppTest.class))
       .build();
-  }
-
-  private static TestExecutionListener executionListener() {
-    return new TestExecutionListener() {
-      @Override
-      public void testPlanExecutionStarted(TestPlan testPlan) {
-        System.out.println("[testPlanExecutionStarted]");
-      }
-
-      @Override
-      public void executionStarted(TestIdentifier testId) {
-        System.out.println("[executionStarted] %s (%s)".formatted(testId.getUniqueId(), testId.getDisplayName()));
-      }
-
-      @Override
-      public void executionFinished(TestIdentifier testId, TestExecutionResult testExecutionResult) {
-        System.out.println("[executionFinished] %s (%s)".formatted(testId.getUniqueId(), testId.getDisplayName()));
-      }
-
-      @Override
-      public void testPlanExecutionFinished(TestPlan testPlan) {
-        System.out.println("[testPlanExecutionFinished]");
-      }
-    };
   }
 
   private static LauncherDiscoveryListener launcherDiscoveryListener() {
@@ -76,6 +53,30 @@ public class LaunchMain {
       @Override
       public void launcherDiscoveryFinished(LauncherDiscoveryRequest request) {
         System.out.println("[launcherDiscoveryFinished]");
+      }
+    };
+  }
+
+  private static TestExecutionListener testExecutionListener() {
+    return new TestExecutionListener() {
+      @Override
+      public void testPlanExecutionStarted(TestPlan testPlan) {
+        System.out.println("[testPlanExecutionStarted]");
+      }
+
+      @Override
+      public void executionStarted(TestIdentifier testId) {
+        System.out.println("[executionStarted] %s (%s)".formatted(testId.getUniqueId(), testId.getDisplayName()));
+      }
+
+      @Override
+      public void executionFinished(TestIdentifier testId, TestExecutionResult testExecutionResult) {
+        System.out.println("[executionFinished] %s (%s)".formatted(testId.getUniqueId(), testId.getDisplayName()));
+      }
+
+      @Override
+      public void testPlanExecutionFinished(TestPlan testPlan) {
+        System.out.println("[testPlanExecutionFinished]");
       }
     };
   }
