@@ -14,6 +14,8 @@ public class TestMethodDescriptor extends AbstractTestDescriptor {
   }
 
   public void runTest() {
+    //TODO KDK: [1] Access the method via reflection instead of hard-coding the class and method
+    //AppTest.class.getDeclaredMethod("appHasAGreeting")
     new AppTest().appHasAGreeting();
   }
 }
