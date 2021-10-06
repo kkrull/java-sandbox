@@ -54,6 +54,15 @@ LaunchMain says hello!
     TestDescriptor engineDescriptor = request.getRootTestDescriptor();
     EngineExecutionListener listener = request.getEngineExecutionListener();
     listener.executionStarted(engineDescriptor);
+
+    for (TestDescriptor childDescriptor : engineDescriptor.getChildren()) {
+      TestMethodDescriptor testDescriptor = (TestMethodDescriptor) childDescriptor;
+      listener.executionStarted(testDescriptor);
+
+      testDescriptor.runTest();
+      listener.executionFinished(testDescriptor, TestExecutionResult.successful());
+    }
+
     listener.executionFinished(engineDescriptor, TestExecutionResult.successful());
   }
 

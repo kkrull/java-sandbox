@@ -12,4 +12,8 @@ public class TestMethodDescriptor extends AbstractTestDescriptor {
   public Type getType() {
     return Type.TEST;
   }
+
+  public void runTest() {
+    new AppTest().appHasAGreeting();
+  }
 }
