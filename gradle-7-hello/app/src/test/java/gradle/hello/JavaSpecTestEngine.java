@@ -1,22 +1,24 @@
 package gradle.hello;
 
 import org.junit.platform.engine.*;
+import org.junit.platform.engine.discovery.ClassSelector;
 import org.junit.platform.engine.support.descriptor.EngineDescriptor;
 
 import java.lang.reflect.Method;
 import java.util.Arrays;
-import java.util.stream.Stream;
 
 public class JavaSpecTestEngine implements TestEngine {
   @Override
   public TestDescriptor discover(EngineDiscoveryRequest discoveryRequest, UniqueId engineId) {
     EngineDescriptor engineDescriptor = new EngineDescriptor(engineId, "JavaSpec");
 
-    //TODO KDK: [2] Use discoveryRequest#getSelectorsByType to get the class selector and generate TestDescriptors for the class and for the test method
-    Class<?> testClass = AppTest.class;
-    Arrays.stream(testClass.getDeclaredMethods())
-      .map(testMethod -> TestMethodDescriptor.forMethod(engineId, testClass, testMethod))
-      .forEach(engineDescriptor::addChild);
+    discoveryRequest.getSelectorsByType(ClassSelector.class).stream()
+      .map(ClassSelector::getJavaClass)
+      .forEach(testClass -> {
+        Arrays.stream(testClass.getDeclaredMethods())
+          .map(testMethod -> TestMethodDescriptor.forMethod(engineId, testClass, testMethod))
+          .forEach(engineDescriptor::addChild);
+      });
 
     return engineDescriptor;
   }
