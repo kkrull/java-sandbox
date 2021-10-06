@@ -45,12 +45,16 @@ LaunchMain says hello!
   @Override
   public TestDescriptor discover(EngineDiscoveryRequest discoveryRequest, UniqueId engineId) {
     EngineDescriptor engineDescriptor = new EngineDescriptor(engineId, "JavaSpec");
+    engineDescriptor.addChild(new TestMethodDescriptor(engineId.append("method", "appHasAGreeting()"), "AppTest#appHasAGreeting"));
     return engineDescriptor;
   }
 
   @Override
   public void execute(ExecutionRequest request) {
-
+    TestDescriptor engineDescriptor = request.getRootTestDescriptor();
+    EngineExecutionListener listener = request.getEngineExecutionListener();
+    listener.executionStarted(engineDescriptor);
+    listener.executionFinished(engineDescriptor, TestExecutionResult.successful());
   }
 
   @Override
