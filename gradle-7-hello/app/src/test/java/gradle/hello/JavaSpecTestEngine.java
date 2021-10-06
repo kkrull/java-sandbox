@@ -3,13 +3,20 @@ package gradle.hello;
 import org.junit.platform.engine.*;
 import org.junit.platform.engine.support.descriptor.EngineDescriptor;
 
+import java.lang.reflect.Method;
+
 public class JavaSpecTestEngine implements TestEngine {
   @Override
   public TestDescriptor discover(EngineDiscoveryRequest discoveryRequest, UniqueId engineId) {
     EngineDescriptor engineDescriptor = new EngineDescriptor(engineId, "JavaSpec");
 
     //TODO KDK: [3] Use discoveryRequest#getSelectorsByType to get the class selector and generate TestDescriptors for the class and for the test method
-    engineDescriptor.addChild(new TestMethodDescriptor(engineId.append("method", "appHasAGreeting()"), "AppTest#appHasAGreeting"));
+    Class<?> testClass = AppTest.class;
+    engineDescriptor.addChild(TestMethodDescriptor.forMethod(
+      engineId,
+      testClass,
+      getDeclaredMethod(testClass, "appHasAGreeting"))
+    );
     return engineDescriptor;
   }
 
@@ -34,5 +41,13 @@ public class JavaSpecTestEngine implements TestEngine {
   @Override
   public String getId() {
     return "javaspec-engine";
+  }
+
+  private static Method getDeclaredMethod(Class<?> declaringClass, String name) {
+    try {
+      return declaringClass.getDeclaredMethod(name);
+    } catch (NoSuchMethodException e) {
+      throw new RuntimeException("Failed to access test method", e);
+    }
   }
 }
