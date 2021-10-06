@@ -14,7 +14,8 @@ class AppTest {
     System.out.println("[AppTest::AppTest]");
   }
 
-  @Test void appHasAGreeting() {
+  @Test
+  public void appHasAGreeting() {
     System.out.println("[AppTest#appHasAGreeting]");
     _numTimesRun++;
     App subject = new App();

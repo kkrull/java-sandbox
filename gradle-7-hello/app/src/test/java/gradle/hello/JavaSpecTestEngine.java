@@ -4,19 +4,20 @@ import org.junit.platform.engine.*;
 import org.junit.platform.engine.support.descriptor.EngineDescriptor;
 
 import java.lang.reflect.Method;
+import java.util.Arrays;
+import java.util.stream.Stream;
 
 public class JavaSpecTestEngine implements TestEngine {
   @Override
   public TestDescriptor discover(EngineDiscoveryRequest discoveryRequest, UniqueId engineId) {
     EngineDescriptor engineDescriptor = new EngineDescriptor(engineId, "JavaSpec");
 
-    //TODO KDK: [3] Use discoveryRequest#getSelectorsByType to get the class selector and generate TestDescriptors for the class and for the test method
+    //TODO KDK: [2] Use discoveryRequest#getSelectorsByType to get the class selector and generate TestDescriptors for the class and for the test method
     Class<?> testClass = AppTest.class;
-    engineDescriptor.addChild(TestMethodDescriptor.forMethod(
-      engineId,
-      testClass,
-      getDeclaredMethod(testClass, "appHasAGreeting"))
-    );
+    Arrays.stream(testClass.getDeclaredMethods())
+      .map(testMethod -> TestMethodDescriptor.forMethod(engineId, testClass, testMethod))
+      .forEach(engineDescriptor::addChild);
+
     return engineDescriptor;
   }
 
@@ -26,7 +27,7 @@ public class JavaSpecTestEngine implements TestEngine {
     EngineExecutionListener listener = request.getEngineExecutionListener();
     listener.executionStarted(engineDescriptor);
 
-    //TODO KDK: [2] Allow for a class descriptor with TestMethodDescriptors under it
+    //TODO KDK: [3] Allow for a class descriptor with TestMethodDescriptors under it
     for (TestDescriptor childDescriptor : engineDescriptor.getChildren()) {
       TestMethodDescriptor testDescriptor = (TestMethodDescriptor) childDescriptor;
       listener.executionStarted(testDescriptor);
