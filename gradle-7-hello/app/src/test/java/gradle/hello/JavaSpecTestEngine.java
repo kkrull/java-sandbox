@@ -1,5 +1,6 @@
 package gradle.hello;
 
+import org.junit.jupiter.api.Test;
 import org.junit.platform.engine.*;
 import org.junit.platform.engine.discovery.ClassSelector;
 import org.junit.platform.engine.support.descriptor.EngineDescriptor;
@@ -16,6 +17,7 @@ public class JavaSpecTestEngine implements TestEngine {
       .map(ClassSelector::getJavaClass)
       .forEach(testClass -> {
         Arrays.stream(testClass.getDeclaredMethods())
+          .filter(m -> m.getAnnotation(Test.class) != null)
           .map(testMethod -> TestMethodDescriptor.forMethod(engineId, testClass, testMethod))
           .forEach(engineDescriptor::addChild);
       });
