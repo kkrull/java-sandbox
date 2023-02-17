@@ -12,6 +12,9 @@ permissions:
 
 jobs:
   build:
+    env:
+      working-directory: greeter
+
     runs-on: ubuntu-latest
 
     steps:
@@ -26,12 +29,10 @@ jobs:
     - name: Java Configuration
       run: |
         java -version
+      working-directory: ${{env.working-directory}}
 
     - name: Gradle Build and Test
       uses: gradle/gradle-build-action@v2.3.3
       with:
         arguments: test
-
-    - name: Gradle Configuration
-      run: |
-        ./gradlew --version
+        build-root-directory: ${{env.working-directory}}

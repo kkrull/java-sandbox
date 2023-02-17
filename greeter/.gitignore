@@ -1,15 +1,3 @@
-# IntelliJ
-*.iml
-.idea/
-
-# Maven
-target/
-
-# VSCode
-.vscode/
-
-## Gradle
-
 # Ignore Gradle project-specific cache directory
 .gradle
 
