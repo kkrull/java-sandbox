@@ -9,4 +9,10 @@ class GreeterTest {
     Greeter classUnderTest = new Greeter();
     assertTrue(classUnderTest.someLibraryMethod(), "someLibraryMethod should return 'true'");
   }
+
+  @Test
+  void makeGreetingAddressesTheWholeWorld() {
+    Greeter subject = new Greeter();
+    assertEquals("Hello World!", subject.makeGreeting());
+  }
 }
