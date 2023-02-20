@@ -16,18 +16,18 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
-    - name: Java Setup
+    - name: Java setup
       uses: actions/setup-java@v3
       with:
         distribution: 'temurin'
         java-version: '11'
 
-    - name: Java Configuration
+    - name: Java configuration
       run: |
         java -version
       working-directory: ${{env.working-directory}}
 
-    - name: Gradle Build and Test
+    - name: Gradle build
       uses: gradle/gradle-build-action@v2.3.3
       with:
         arguments: test
