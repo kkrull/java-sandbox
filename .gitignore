@@ -1,4 +1,8 @@
-*.iml
+# IntelliJ
 .idea/
-target/
+*.iml
 
+# VSCode
+.project
+.vscode/
+bin/

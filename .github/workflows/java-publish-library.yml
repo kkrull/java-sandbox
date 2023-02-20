@@ -1,0 +1,36 @@
+name: Publish Java Library
+
+on:
+  # push:
+  #   branches: [ main ]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    env:
+      working-directory: greeter
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Java setup
+      uses: actions/setup-java@v3
+      with:
+        distribution: 'temurin'
+        java-version: '11'
+
+    - name: Java configuration
+      run: |
+        java -version
+      working-directory: ${{env.working-directory}}
+
+    - name: Gradle build
+      uses: gradle/gradle-build-action@v2.3.3
+      with:
+        arguments: test
+        build-root-directory: ${{env.working-directory}}
