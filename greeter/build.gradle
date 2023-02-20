@@ -17,6 +17,7 @@ publishing {
     maven(MavenPublication) {
       from components.java
 
+      //Publishing to Maven Central via Sonatype OSSRH requires extra POM info
       pom {
         description = """The next-generation solution that synergizes the
           |daylights out of your organization's people-greeting needs.
@@ -71,7 +72,7 @@ repositories {
   mavenCentral()
 }
 
-tasks.named('test') {
+test {
   useJUnitPlatform()
 }
 
