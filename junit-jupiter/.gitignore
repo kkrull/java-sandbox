@@ -1,9 +1,0 @@
-#Gradle project-specific cache directory
-.gradle
-
-#Gradle build output
-build
-
-#VSCode build output
-app/bin
-junit-platform-console-standalone-1.7.0.jar
