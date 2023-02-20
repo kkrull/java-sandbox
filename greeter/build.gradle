@@ -19,7 +19,20 @@ java {
     }
   }
 
-  //Build a -sources jar too, adding a standalone license file
+  tasks.named('javadoc', Javadoc) {
+    options.addStringOption('link', 'https://docs.oracle.com/javase/8/docs/api')
+    options.addStringOption('source', '1.8')
+  }
+
+  //Add a -javadoc jar (Sonatype OSSRH requirement)
+  withJavadocJar()
+  tasks.named('javadocJar') {
+    into('META-INF') {
+      from './LICENSE'
+    }
+  }
+
+  //Add a -sources jar (Sonatype OSSRH requirement)
   withSourcesJar()
   tasks.named('sourcesJar') {
     into('META-INF') {
@@ -28,6 +41,7 @@ java {
   }
 }
 
+//https://docs.gradle.org/current/userguide/publishing_maven.html
 publishing {
   publications {
     maven(MavenPublication) {

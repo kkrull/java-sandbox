@@ -23,8 +23,14 @@
  */
 package com.github.kkrull.sandbox;
 
-//Greets people
+/**
+ * Just about the smallest class I could think of, for testing a CI/CD workflow.
+ */
 public class Greeter {
+  /**
+   * Creates a greeting for an unspecified group of people.
+   * @return You'll never guess...
+   */
   public String makeGreeting() {
     return "Hello World!";
   }
