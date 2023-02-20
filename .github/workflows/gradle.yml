@@ -1,6 +1,8 @@
-name: Java CI/CD with Gradle
+name: Publish Java Library
 
 on:
+  # push:
+  #   branches: [ main ]
   workflow_dispatch:
 
 permissions:
