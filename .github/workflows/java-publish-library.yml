@@ -30,7 +30,7 @@ jobs:
       working-directory: ${{env.working-directory}}
 
     - name: Gradle validation
-      uses: gradle/wrapper-validation-action@8d49e55
+      uses: gradle/wrapper-validation-action@8d49e559aae34d3e0eb16cde532684bc9702762b
 
     - name: Gradle build
       uses: gradle/gradle-build-action@v2.3.3
