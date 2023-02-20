@@ -1,15 +1,9 @@
 package com.github.kkrull.sandbox;
 
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class GreeterTest {
-  @Test
-  void testSomeLibraryMethod() {
-    Greeter classUnderTest = new Greeter();
-    assertTrue(classUnderTest.someLibraryMethod(), "someLibraryMethod should return 'true'");
-  }
-
   @Test
   void makeGreetingAddressesTheWholeWorld() {
     Greeter subject = new Greeter();
