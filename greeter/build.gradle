@@ -12,10 +12,6 @@ dependencies {
   testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
 }
 
-jar {
-  archiveBaseName = 'greeter'
-}
-
 publishing {
   publications {
     maven(MavenPublication) {
