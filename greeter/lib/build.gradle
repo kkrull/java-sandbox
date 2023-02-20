@@ -1,11 +1,23 @@
 plugins {
   id 'java-library'
   id 'com.adarshr.test-logger' version '3.2.0'
+  id 'maven-publish'
 }
 
 dependencies {
   testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.2'
   testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
+}
+
+publishing {
+  repositories {
+    name = 'OSSRH'
+    url = 'https://oss.sonatype.org/service/local/staging/deploy/maven2/'
+    credentialls {
+      username = System.getEnv("MAVEN_USERNAME")
+      password = System.getEnv("MAVEN_PASSWORD")
+    }
+  }
 }
 
 repositories {
