@@ -41,7 +41,7 @@ jobs:
         MAVEN_PASSWORD: ${{ secrets.OSSRH_PASSWORD }}
       with:
         arguments: |
-          -Psigning.key="${{ secrets.GPG_PRIVATE_KEY }}" \
-          -Psigning.passphrase="${{ secrets.GPG_SIGNING_PASSPHRASE }}" \
+          -Psigning.key="${{ secrets.GPG_PRIVATE_KEY }}"
+          -Psigning.passphrase="${{ secrets.GPG_SIGNING_PASSPHRASE }}"
           publish
         build-root-directory: ${{env.working-directory}}
