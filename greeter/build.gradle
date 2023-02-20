@@ -2,6 +2,7 @@ plugins {
   id 'java-library'
   id 'com.adarshr.test-logger' version '3.2.0'
   id 'maven-publish'
+  id 'signing'
 }
 
 group = 'info.javaspec'
@@ -100,6 +101,15 @@ publishing {
 
 repositories {
   mavenCentral()
+}
+
+//Artifacts published to Maven Central via Sonatype OSSRH have to be signed
+//https://docs.gradle.org/current/userguide/signing_plugin.html#sec:in-memory-keys
+signing {
+  def signingKey = findProperty('signing.key')
+  def signingPassphrase = findProperty('signing.passphrase')
+  useInMemoryPgpKeys(signingKey, signingPassphrase)
+  sign publishing.publications['maven']
 }
 
 test {
