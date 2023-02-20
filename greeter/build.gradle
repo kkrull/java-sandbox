@@ -18,6 +18,14 @@ java {
       from './LICENSE'
     }
   }
+
+  //Build a -sources jar too, adding a standalone license file
+  withSourcesJar()
+  tasks.named('sourcesJar') {
+    into('META-INF') {
+      from './LICENSE'
+    }
+  }
 }
 
 publishing {
