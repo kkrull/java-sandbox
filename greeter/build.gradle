@@ -16,6 +16,42 @@ publishing {
   publications {
     maven(MavenPublication) {
       from components.java
+
+      pom {
+        description = """The next-generation solution that synergizes the
+          |daylights out of your organization's people-greeting needs.
+          |It also tests out JavaSpec's CI/CD workflow.""".stripMargin()
+
+        name = 'Greeter'
+        url = 'https://javaspec.info'
+
+        developers {
+          developer {
+            id = 'kkrull'
+            email = 'kdkrull@gmail.com'
+            name = 'Kyle Krull'
+            organizationUrl = 'https://github.com/kkrull'
+          }
+        }
+
+        issueManagement {
+          system = 'GitHub'
+          url = 'https://github.com/kkrull/javaspec/issues'
+        }
+
+        licenses {
+          license {
+            name = 'MIT license'
+            url = 'https://spdx.org/licenses/MIT'
+          }
+        }
+
+        scm {
+          connection = 'scm:git:git://github.com/kkrull/javaspec.git'
+          developerConnection = 'scm:git:ssh://github.com:kkrull/javaspec.git'
+          url = 'https://github.com/kkrull/javaspec'
+        }
+      }
     }
   }
 
@@ -24,8 +60,8 @@ publishing {
       name = 'OSSRH'
       url = 'https://oss.sonatype.org/service/local/staging/deploy/maven2/'
       credentials {
-        username = System.getenv("MAVEN_USERNAME")
-        password = System.getenv("MAVEN_PASSWORD")
+        username = System.getenv('MAVEN_USERNAME')
+        password = System.getenv('MAVEN_PASSWORD')
       }
     }
   }
