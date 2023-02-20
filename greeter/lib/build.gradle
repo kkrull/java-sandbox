@@ -13,7 +13,7 @@ publishing {
   repositories {
     name = 'OSSRH'
     url = 'https://oss.sonatype.org/service/local/staging/deploy/maven2/'
-    credentialls {
+    credentials {
       username = System.getEnv("MAVEN_USERNAME")
       password = System.getEnv("MAVEN_PASSWORD")
     }
