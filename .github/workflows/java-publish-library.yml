@@ -3,6 +3,8 @@ name: Publish Java Library
 on:
   # push:
   #   branches: [ main ]
+  # release:
+  #   types: [created]
   workflow_dispatch:
 
 permissions:
@@ -29,11 +31,14 @@ jobs:
         java -version
       working-directory: ${{env.working-directory}}
 
-    - name: Gradle validation
+    - name: Validate Gradle wrapper
       uses: gradle/wrapper-validation-action@8d49e559aae34d3e0eb16cde532684bc9702762b
 
-    - name: Gradle build
+    - name: Gradle publish
       uses: gradle/gradle-build-action@v2.3.3
+      env:
+        MAVEN_USERNAME: ${{ secrets.OSSRH_USERNAME }}
+        MAVEN_PASSWORD: ${{ secrets.OSSRH_PASSWORD }}
       with:
-        arguments: test
+        arguments: publish
         build-root-directory: ${{env.working-directory}}
