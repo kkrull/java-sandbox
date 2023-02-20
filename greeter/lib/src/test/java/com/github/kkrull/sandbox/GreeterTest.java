@@ -3,10 +3,10 @@ package com.github.kkrull.sandbox;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
-class LibraryTest {
+class GreeterTest {
   @Test
   void testSomeLibraryMethod() {
-    Library classUnderTest = new Library();
+    Greeter classUnderTest = new Greeter();
     assertTrue(classUnderTest.someLibraryMethod(), "someLibraryMethod should return 'true'");
   }
 }
