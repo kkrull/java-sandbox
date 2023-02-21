@@ -49,6 +49,7 @@ publishing {
       from components.java
 
       //Publishing to Maven Central via Sonatype OSSRH requires extra POM info
+      //https://central.sonatype.org/publish/requirements/
       pom {
         description = """The next-generation solution that synergizes the
           |daylights out of your organization's people-greeting needs.
@@ -89,6 +90,10 @@ publishing {
 
   repositories {
     maven {
+      //Publishing opens a staging repository in Sonatype Nexus:
+      // https://oss.sonatype.org/#stagingRepositories
+      //Closing and releasing the staging repository allows it to go here:
+      // https://central.sonatype.com/artifact/info.javaspec/greeter/0.0.1/versions
       name = 'OSSRH'
       url = 'https://oss.sonatype.org/service/local/staging/deploy/maven2/'
       credentials {
@@ -110,6 +115,9 @@ signing {
   def signingPassphrase = System.getenv('GPG_SIGNING_PASSPHRASE')
   // project.logger.lifecycle('GPG_PRIVATE_KEY: <' + signingKey + '>')
   // project.logger.lifecycle('GPG_SIGNING_PASSPHRASE: <' + signingPassphrase + '>')
+
+  //In-memory keys have to be ASCII-armored: https://stackoverflow.com/a/58000485/112682
+  //Public keys need to be distributed: https://www.gnupg.org/gph/en/manual/x457.html
   useInMemoryPgpKeys(signingKey, signingPassphrase)
   sign publishing.publications['maven']
 }
