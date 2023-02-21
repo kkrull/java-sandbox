@@ -108,8 +108,8 @@ repositories {
 signing {
   def signingKey = System.getenv('GPG_PRIVATE_KEY')
   def signingPassphrase = System.getenv('GPG_SIGNING_PASSPHRASE')
-  project.logger.lifecycle('GPG_PRIVATE_KEY: <' + signingKey + '>')
-  project.logger.lifecycle('GPG_SIGNING_PASSPHRASE: <' + signingPassphrase + '>')
+  // project.logger.lifecycle('GPG_PRIVATE_KEY: <' + signingKey + '>')
+  // project.logger.lifecycle('GPG_SIGNING_PASSPHRASE: <' + signingPassphrase + '>')
   useInMemoryPgpKeys(signingKey, signingPassphrase)
   sign publishing.publications['maven']
 }
