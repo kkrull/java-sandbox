@@ -1,0 +1,132 @@
+plugins {
+  id 'java-library'
+  id 'com.adarshr.test-logger' version '3.2.0'
+  id 'maven-publish'
+  id 'signing'
+}
+
+group = 'info.javaspec'
+version = '0.0.1'
+
+dependencies {
+  testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.2'
+  testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
+}
+
+java {
+  jar {
+    into('META-INF') {
+      from './LICENSE'
+    }
+  }
+
+  tasks.named('javadoc', Javadoc) {
+    options.addStringOption('link', 'https://docs.oracle.com/javase/8/docs/api')
+    options.addStringOption('source', '1.8')
+  }
+
+  //Add a -javadoc jar (Sonatype OSSRH requirement)
+  withJavadocJar()
+  tasks.named('javadocJar') {
+    into('META-INF') {
+      from './LICENSE'
+    }
+  }
+
+  //Add a -sources jar (Sonatype OSSRH requirement)
+  withSourcesJar()
+  tasks.named('sourcesJar') {
+    into('META-INF') {
+      from './LICENSE'
+    }
+  }
+}
+
+//https://docs.gradle.org/current/userguide/publishing_maven.html
+publishing {
+  publications {
+    maven(MavenPublication) {
+      from components.java
+
+      //Publishing to Maven Central via Sonatype OSSRH requires extra POM info
+      //https://central.sonatype.org/publish/requirements/
+      pom {
+        description = """The next-generation solution that synergizes the
+          |daylights out of your organization's people-greeting needs.
+          |It also tests out JavaSpec's CI/CD workflow.""".stripMargin()
+
+        name = 'Greeter'
+        url = 'https://javaspec.info'
+
+        developers {
+          developer {
+            id = 'kkrull'
+            email = 'kdkrull@gmail.com'
+            name = 'Kyle Krull'
+            organizationUrl = 'https://github.com/kkrull'
+          }
+        }
+
+        issueManagement {
+          system = 'GitHub'
+          url = 'https://github.com/kkrull/javaspec/issues'
+        }
+
+        licenses {
+          license {
+            name = 'MIT license'
+            url = 'https://spdx.org/licenses/MIT'
+          }
+        }
+
+        scm {
+          connection = 'scm:git:git://github.com/kkrull/javaspec.git'
+          developerConnection = 'scm:git:ssh://github.com:kkrull/javaspec.git'
+          url = 'https://github.com/kkrull/javaspec'
+        }
+      }
+    }
+  }
+
+  repositories {
+    maven {
+      //Publishing opens a staging repository in Sonatype Nexus:
+      // https://oss.sonatype.org/#stagingRepositories
+      //Closing and releasing the staging repository allows it to go here:
+      // https://central.sonatype.com/artifact/info.javaspec/greeter/0.0.1/versions
+      name = 'OSSRH'
+      url = 'https://oss.sonatype.org/service/local/staging/deploy/maven2/'
+      credentials {
+        username = System.getenv('MAVEN_USERNAME')
+        password = System.getenv('MAVEN_PASSWORD')
+      }
+    }
+  }
+}
+
+repositories {
+  mavenCentral()
+}
+
+//Artifacts published to Maven Central via Sonatype OSSRH have to be signed
+//https://docs.gradle.org/current/userguide/signing_plugin.html#sec:in-memory-keys
+signing {
+  def signingKey = System.getenv('GPG_PRIVATE_KEY')
+  def signingPassphrase = System.getenv('GPG_SIGNING_PASSPHRASE')
+  // project.logger.lifecycle('GPG_PRIVATE_KEY: <' + signingKey + '>')
+  // project.logger.lifecycle('GPG_SIGNING_PASSPHRASE: <' + signingPassphrase + '>')
+
+  //In-memory keys have to be ASCII-armored: https://stackoverflow.com/a/58000485/112682
+  //Public keys need to be distributed: https://www.gnupg.org/gph/en/manual/x457.html
+  useInMemoryPgpKeys(signingKey, signingPassphrase)
+  sign publishing.publications['maven']
+}
+
+test {
+  useJUnitPlatform()
+}
+
+//https://github.com/radarsh/gradle-test-logger-plugin
+testlogger {
+  theme 'mocha'
+}
