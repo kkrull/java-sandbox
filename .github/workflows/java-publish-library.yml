@@ -43,3 +43,12 @@ jobs:
       with:
         arguments: publish
         build-root-directory: ${{env.working-directory}}
+
+    - name: Upload Gradle artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: greeter-build
+        path: |
+          greeter/build/docs/
+          greeter/build/libs/
+          greeter/build/publications/
