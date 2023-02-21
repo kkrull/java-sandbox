@@ -5,7 +5,7 @@ GitHub Actions.
 
 ## Sources and other local files
 
-- `/.github/workflows/java-publish-library.yml`: CI/CD configuration for GitHub
+- `.github/workflows/java-publish-library.yml`: CI/CD configuration for GitHub
   Actions.
 - `.envrc`: direnv configuration, if you want to run any of this locally on your
   own machine.  You copied the template, read the instructions, and filled it in
@@ -14,26 +14,32 @@ GitHub Actions.
 - `build.gradle`: Configuration telling Gradle knows how to build, assemble, and
   publish a JAR for the sources in this project.
 - `~/.gnupg/`: GNU Privacy Guard keyring(s) containing public/private key pairs
-  that are used to sign artifacts and verify their signature.
+  that are used to sign artifacts, verify signatures, and ruin developer's
+  lives.
 
 ## Tools and integrations
 
-- **GitHub Actions**: Runs CI/CD workflows for this project.
-- **GNU Privacy Guard (aka `gpg`)**: Signs artifacts.
-- **Maven Central Repository**: The place most people download their artifacts
-  from, when they use Maven, Gradle, or similar build tools.
-- **Sonatype OSSRH**: Maven repository for open source projects.  Artifacts are
-  published here first–internally–before being released to the Maven Central
-  Repository.
-- **Ubuntu key manager**: Hosts the author's public key, so that others can
-  verify signatures on artifacts they download.
+- [**GitHub Actions**](https://docs.github.com/en/actions): Runs CI/CD workflows
+  for this project.
+- [**GNU Privacy Guard (aka `gpg`)**](https://gnupg.org/): Signs artifacts.
+- [**Maven Central Repository**](https://maven.org/): The place most people
+  download their artifacts from, when they use Maven, Gradle, or similar build
+  tools.
+- [**Sonatype OSSRH**](https://oss.sonatype.org/): Maven repository for open
+  source projects.  Artifacts are published here first–internally–before being
+  released to the Maven Central Repository.  Your artifacts much pass a series
+  of trials before they are allowed to ascend to Maven Central.
+- [**Ubuntu keyserver**](https://keyserver.ubuntu.com/): Hosts the author's
+  public key, so that others can verify signatures on artifacts they download.
+  This allows consumers to be confident that it is indeed the author who is
+  pwning them, not some cheap poser.
 
 ## Workflow
 
 1. Bump the version number in this project's Gradle configuration.
 1. Make sure your GNU Privacy Guard key is unexpired, signs with the primary key
    (not a subkey), and is published to a key server.  Ex-communicate any subkeys
-   that are used for signing.  We don't tolerate that kinda behavior around
+   that are used for signing.  We don't tolerate that kind of behavior around
    here.
 1. Update your environment configuration
    1. (local) Update your direnv configuration with Sonatype OSSRH credentials
@@ -46,15 +52,18 @@ GitHub Actions.
 1. Close and release (two separate steps) the staging repository on Sonatype
    Nexus.  It will tell you if information is missing from the POM or if there
    are issues with your keys.
+1. Eventually I am told this results in your artifact appearing on the Maven
+   Central Repository.  I think that took about a day, when I did this 10 years
+   ago.
 
-## Gotchas (with keys–I'm looking at YOU, `gpg`)
+## Gotchas (with keys–I'm looking at YOU `gpg`)
 
 All the problems you are likely to encounter will be related to artifact
 signing.  Most everything else works just fine, but keys?  OMG what a nightmare.
 
 - `gpg` assigns at least 3 different identifiers for everything it creates.
   Passing one kind of ID to a tool that expects a key in one of the other
-  formats leads to saying goodbye in Germany, not the much-preferable Austria.
+  formats leads to it saying goodbye to you the not-nice way.
 - `gpg` generates an additional "subkey" of the parent key you generate on your
   local machine.  You have to go and delete that subkey so that `gpg` uses just
   the parent key to sign things.  Otherwise Sonatype OSSRH will send you a bill
@@ -73,6 +82,5 @@ signing.  Most everything else works just fine, but keys?  OMG what a nightmare.
   BASH's darkest secrets.  And WTF is ASCII armor anyway?  Is it better than
   mithril?
 - Good luck passing said environment variables all the way from your local
-  machine's environment manager (or from your CI/CD secrets) all the Gradle
-  process, unscathed.  Skin that smokewagon and see what happens.  Or are you
-  just gonna stand there and bleed?
+  machine's environment manager (or from your CI/CD secrets) to the Gradle
+  process, unscathed.  Go ahead.  Skin that smoke wagon and see what happens.
