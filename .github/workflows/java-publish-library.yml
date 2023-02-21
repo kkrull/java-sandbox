@@ -37,11 +37,10 @@ jobs:
     - name: Gradle publish
       uses: gradle/gradle-build-action@v2.3.3
       env:
+        GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
+        GPG_SIGNING_PASSPHRASE: ${{ secrets.GPG_SIGNING_PASSPHRASE }}
         MAVEN_USERNAME: ${{ secrets.OSSRH_USERNAME }}
         MAVEN_PASSWORD: ${{ secrets.OSSRH_PASSWORD }}
       with:
-        arguments: |
-          -Psigning.key="${{ secrets.GPG_PRIVATE_KEY }}"
-          -Psigning.passphrase="${{ secrets.GPG_SIGNING_PASSPHRASE }}"
-          publish
+        arguments: publish
         build-root-directory: ${{env.working-directory}}
