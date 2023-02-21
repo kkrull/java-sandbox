@@ -7,6 +7,10 @@ GitHub Actions.
 
 - `/.github/workflows/java-publish-library.yml`: CI/CD configuration for GitHub
   Actions.
+- `.envrc`: direnv configuration, if you want to run any of this locally on your
+  own machine.  You copied the template, read the instructions, and filled it in
+  with your own data, right?  And don't tell me you checked it into source
+  control.  I'm watching you.
 - `build.gradle`: Configuration telling Gradle knows how to build, assemble, and
   publish a JAR for the sources in this project.
 - `~/.gnupg/`: GNU Privacy Guard keyring(s) containing public/private key pairs
@@ -33,7 +37,8 @@ GitHub Actions.
    here.
 1. Update your environment configuration
    1. (local) Update your direnv configuration with Sonatype OSSRH credentials
-      and your GNUPG key information.
+      and your GNUPG key information.  Copy `.envrc-template` to `.envrc` and
+      fill it in.
    1. (remote) Update GitHub Actions secrets (or similar) with Sonatype OSSRH
       credentials and GNUPG key information.
 1. Run the CI/CD pipeline on GitHub Actions.  This builds the JAR and publishes
