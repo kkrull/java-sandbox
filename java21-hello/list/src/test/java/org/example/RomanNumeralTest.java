@@ -16,4 +16,10 @@ public class RomanNumeralTest {
     String romanNumeral = RomanNumeral.convert(2);
     assertEquals("II", romanNumeral);
   }
+
+  @Test
+  void givenThree() throws Exception {
+    String romanNumeral = RomanNumeral.convert(3);
+    assertEquals("III", romanNumeral);
+  }
 }
