@@ -10,4 +10,10 @@ public class RomanNumeralTest {
     String romanNumeral = RomanNumeral.convert(1);
     assertEquals("I", romanNumeral);
   }
+
+  @Test
+  void givenTwo() throws Exception {
+    String romanNumeral = RomanNumeral.convert(2);
+    assertEquals("II", romanNumeral);
+  }
 }
