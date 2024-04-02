@@ -7,9 +7,9 @@ public class RomanNumeral {
     }
 
     if (number == 2) {
-      return "II";
+      return "I" + "I";
     }
 
-    return "III";
+    return "I" + "I" + "I";
   }
 }
