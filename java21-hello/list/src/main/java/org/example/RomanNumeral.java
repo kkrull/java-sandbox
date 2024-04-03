@@ -7,7 +7,10 @@ public class RomanNumeral {
     }
 
     if (number == 2) {
-      return "I" + "I";
+      String romanNumeral = "";
+      romanNumeral = romanNumeral + "I"; //romanNumeral = "" + "I" = "I"
+      romanNumeral = romanNumeral + "I"; //romanNumeral = "I" + "I" = "II"
+      return romanNumeral;
     }
 
     return "I" + "I" + "I";
