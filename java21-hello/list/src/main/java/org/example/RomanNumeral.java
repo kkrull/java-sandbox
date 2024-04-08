@@ -13,6 +13,10 @@ public class RomanNumeral {
       return romanNumeral;
     }
 
-    return "I" + "I" + "I";
+    String romanNumeral = "";
+    romanNumeral = romanNumeral + "I"; //romanNumeral = "" + "I" = "I"
+    romanNumeral = romanNumeral + "I"; //romanNumeral = "I" + "I" = "II"
+    romanNumeral = romanNumeral + "I"; //romanNumeral = "II" + "I" = "III"
+    return romanNumeral;
   }
 }
