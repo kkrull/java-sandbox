@@ -4,7 +4,10 @@ public class RomanNumeral {
   public static String convert(int number) {
     if(number == 1) {
       String romanNumeral = "";
-      romanNumeral = romanNumeral + "I";
+      for (int i = 0; i < 1; i = i + 1) {
+        romanNumeral = romanNumeral + "I";
+      }
+
       return romanNumeral;
     }
 
