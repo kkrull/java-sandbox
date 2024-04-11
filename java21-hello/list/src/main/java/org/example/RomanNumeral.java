@@ -3,20 +3,22 @@ package org.example;
 public class RomanNumeral {
   public static String convert(int number) {
     if(number == 1) {
-      return "I";
+      String romanNumeral = "";
+      romanNumeral = romanNumeral + "I";
+      return romanNumeral;
     }
 
     if (number == 2) {
       String romanNumeral = "";
-      romanNumeral = romanNumeral + "I"; //romanNumeral = "" + "I" = "I"
-      romanNumeral = romanNumeral + "I"; //romanNumeral = "I" + "I" = "II"
+      romanNumeral = romanNumeral + "I";
+      romanNumeral = romanNumeral + "I";
       return romanNumeral;
     }
 
     String romanNumeral = "";
-    romanNumeral = romanNumeral + "I"; //romanNumeral = "" + "I" = "I"
-    romanNumeral = romanNumeral + "I"; //romanNumeral = "I" + "I" = "II"
-    romanNumeral = romanNumeral + "I"; //romanNumeral = "II" + "I" = "III"
+    romanNumeral = romanNumeral + "I";
+    romanNumeral = romanNumeral + "I";
+    romanNumeral = romanNumeral + "I";
     return romanNumeral;
   }
 }
