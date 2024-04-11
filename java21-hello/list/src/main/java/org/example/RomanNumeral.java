@@ -16,9 +16,10 @@ public class RomanNumeral {
     }
 
     String romanNumeral = "";
-    romanNumeral = romanNumeral + "I";
-    romanNumeral = romanNumeral + "I";
-    romanNumeral = romanNumeral + "I";
+    for(int i = 0; i < 3; i = i + 1) {
+      romanNumeral = romanNumeral + "I";
+    }
+
     return romanNumeral;
   }
 }
