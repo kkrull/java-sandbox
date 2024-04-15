@@ -10,3 +10,5 @@ public class RomanNumeral {
     return romanNumeral;
   }
 }
+
+//Line-Seven: Concatenate one I onto the end of the string held in the romanNumeral variable
