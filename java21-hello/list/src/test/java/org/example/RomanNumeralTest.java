@@ -6,20 +6,9 @@ import org.junit.jupiter.api.Test;
 
 public class RomanNumeralTest {
   @Test
-  void givenOne() throws Exception {
-    String romanNumeral = RomanNumeral.convert(1);
-    assertEquals("I", romanNumeral);
-  }
-
-  @Test
-  void givenTwo() throws Exception {
-    String romanNumeral = RomanNumeral.convert(2);
-    assertEquals("II", romanNumeral);
-  }
-
-  @Test
-  void givenThree() throws Exception {
-    String romanNumeral = RomanNumeral.convert(3);
-    assertEquals("III", romanNumeral);
+  void eachICountsAsOne() throws Exception {
+    assertEquals("I", RomanNumeral.convert(1));
+    assertEquals("II", RomanNumeral.convert(2));
+    assertEquals("III", RomanNumeral.convert(3));
   }
 }
