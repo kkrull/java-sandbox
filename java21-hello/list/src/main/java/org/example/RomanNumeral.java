@@ -2,6 +2,10 @@ package org.example;
 
 public class RomanNumeral {
   public static String convert(int number) {
+    if (number == 5) {
+      return "V";
+    }
+
     String romanNumeral = "";
     for (int i = 0; i < number; i = i + 1) {
       romanNumeral = romanNumeral + "I";
@@ -10,5 +14,3 @@ public class RomanNumeral {
     return romanNumeral;
   }
 }
-
-//Line-Seven: Concatenate one I onto the end of the string held in the romanNumeral variable
