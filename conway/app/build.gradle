@@ -1,0 +1,23 @@
+plugins {
+  id 'application' // Add support for building a CLI application in Java
+}
+
+application {
+  mainClass = 'com.github.kkrull.conway.App' //Entry point for CLI application
+}
+
+dependencies {
+  testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.2'
+  testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
+}
+
+repositories {
+  mavenCentral()
+}
+
+tasks.named('test') {
+  useJUnitPlatform()
+  testLogging {
+    events "passed", "skipped", "failed"
+  }
+}
