@@ -1,0 +1,34 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<name>Hibernate Example: Web Application</name>
+	<groupId>org.haxor</groupId>
+	<artifactId>hibernate.webapp</artifactId>
+	<version>${applicationVersion}</version>
+	<packaging>war</packaging>
+	<parent>
+		<groupId>org.haxor</groupId>
+		<artifactId>hibernate</artifactId>
+		<version>1.0</version>
+	</parent>
+	
+	<dependencies>
+		<!-- Other modules -->
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>hibernate.core</artifactId>
+			<version>${applicationVersion}</version>
+		</dependency>
+		
+		<!-- Third-party dependencies -->
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>jstl</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>servlet-api</artifactId>
+		</dependency>
+	</dependencies>
+</project>

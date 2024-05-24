@@ -1,0 +1,41 @@
+@CHARSET "UTF-8";
+
+/* Top-level structures */
+
+P {
+	font-family:"sans-serif";
+}
+
+h3 {
+	font-size:1.25em;
+	background-color: #EFEFFB;
+}
+
+h4 {
+	font-size:0.875em;
+	font-family:"sans-serif";
+	font-weight: bold;
+	border-bottom: thin solid black;
+	background-color: #F2F2F2;
+}
+
+/* Forms */
+
+INPUT[type="text"] {
+	width: 100px;
+}
+
+SELECT {
+	width: 125px;
+}
+
+/* Tables */
+
+TABLE.listing {
+	border-spacing: 15px 0px;
+}
+
+TH {
+	text-align: left;
+	font-size: 0.875em;
+}

@@ -1,0 +1,36 @@
+<!-- Helper for HSQLDB -->
+<project name="HibernateUtil" default="start" basedir=".">
+	
+	<!-- Set up a classpath for running HSQLDB, based upon the location defined in environment -->
+	<property environment="env"/>
+	<fail unless="env.HSQLDB_HOME" message="HSQLDB_HOME not set"/>
+	<path id="hsqldb.classpath">
+		<fileset dir="${env.HSQLDB_HOME}/lib" includes="**/*.jar"/>
+	</path>
+	
+	<!-- Information about the database -->
+	<property name="hsqldb.url" value="jdbc:hsqldb:hsql://127.0.0.1"/>
+	<property name="hsqldb.driver" value="org.hsqldb.jdbcDriver"/>
+	
+	<target name="start" description="Start HSQLDB Server">
+		<java classname="org.hsqldb.Server" classpathref="hsqldb.classpath"
+			fork="true" spawn="true"/>
+	</target>
+	
+	<target name="stop" description="Stop HSQLDB Server">
+		<sql url="${hsqldb.url}" driver="${hsqldb.driver}"
+			classpathref="hsqldb.classpath" autocommit="true" userid="sa" password="">
+			SHUTDOWN
+		</sql>
+	</target>
+	
+	<target name="manage" description="Start the HSQLDB Manager">
+		<java classname="org.hsqldb.util.DatabaseManagerSwing" classpathref="hsqldb.classpath"
+			fork="true" failonerror="true">
+			<arg value="-url"/>
+			<arg value="${hsqldb.url}"/>
+			<arg value="-driver"/>
+			<arg value="${hsqldb.driver}"/>
+		</java>
+	</target>
+</project>

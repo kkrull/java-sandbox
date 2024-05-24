@@ -1,0 +1,33 @@
+<web-app xmlns="http://java.sun.com/xml/ns/j2ee"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"
+	version="2.4">
+	<display-name>Archetype Created Web Application</display-name>
+	
+	<servlet>
+		<servlet-name>AddPerson</servlet-name>
+		<servlet-class>webapp.add.AddPerson</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>AddPerson</servlet-name>
+		<url-pattern>/addPerson</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>AddEvent</servlet-name>
+		<servlet-class>webapp.add.AddEvent</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>AddEvent</servlet-name>
+		<url-pattern>/addEvent</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>Register</servlet-name>
+		<servlet-class>webapp.add.Register</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>Register</servlet-name>
+		<url-pattern>/register</url-pattern>
+	</servlet-mapping>
+</web-app>
